@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.spring.match.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="OrderMapper" type="org.spring.match.entity.OrderMain">
+        <id column="id" property="id"/>
+        <result column="city_id" property="cityId"/>
+        <result column="one_goods_id" property="oneGoodsId"/>
+        <result column="two_goods_id" property="twoGoodsId"/>
+        <result column="order_total" property="orderAmount"/>
+        <result column="order_money" property="orderMoney"/>
+        <result column="motorcycle_type_id" property="motorcycleTypeId"/>
+        <result column="order_datetime" property="orderDatetime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <resultMap id="currentHotGoodsResultMap" type="org.spring.match.vo.CurrentHotGoodsVO">
+        <id column="id" property="id"/>
+        <result column="secondGoodsName" property="secondGoodsName"/>
+        <result column="amount" property="amount"/>
+    </resultMap>
+
+    <resultMap id="wholeNetGoodsRankingVOResultMap" type="org.spring.match.vo.WholeNetGoodsRankingVO">
+        <id column="id" property="id"/>
+        <result column="firstGoodsName" property="oneGoodsName"/>
+        <result column="amount" property="amount"/>
+    </resultMap>
+
+    <resultMap id="tableRowsMessageResultMap" type="org.spring.match.vo.TableRowsMessage">
+        <result column="tableName" property="tableName"/>
+        <result column="tableRows" property="tableRows"/>
+    </resultMap>
+
+    <resultMap id="cityFreightMoneyVOResultMap" type="org.spring.match.vo.CityFreightMoneyVO">
+        <result column="" property="cityName"/>
+        <result column="" property="moneyAmount"/>
+    </resultMap>
+
+    <select id="selectCurrentHotGoods" resultMap="currentHotGoodsResultMap">
+       select sg.id as id ,sg.goods_name as secondGoodsName,count(1) as amount
+       from order_main as om join second_goods sg on om.two_goods_id=sg.id
+       where sg.is_deleted=0
+       group by sg.id,sg.goods_name
+    </select>
+
+    <select id="selectWholeNetGoodsRanking" resultMap="wholeNetGoodsRankingVOResultMap">
+       select fg.id as id ,fg.goods_name as firstGoodsName,count(1) as amount
+       from order_main as om join first_goods fg on om.one_goods_id=fg.id
+       where fg.is_deleted=0
+       group by fg.id,fg.goods_name
+    </select>
+
+    <select id="getTodayOrderTotal" resultType="java.lang.Integer">
+        select count(1)
+        from order_main
+        where is_deleted=0 and DATE_FORMAT(order_datetime,"%Y-%m-%d") = #{dateTime}
+    </select>
+
+    <select id="selectCityFreightMoney" resultMap="cityFreightMoneyVOResultMap">
+        select cp.city_name , sum(om.order_money)
+        from order_main om inner join city_parameter cp on om.city_id = cp.id
+        where om.is_deleted=0 and cp.is_deleted=0
+        group by cp.city_name
+    </select>
+
+    <select id="selectCityFreightAmount">
+
+    </select>
+
+    <select id="selectCityFreightCar">
+
+    </select>
+
+    <select id="selectHistoryAmount">
+
+    </select>
+
+
+    <select id="getAllTableRowCount" resultMap="tableRowsMessageResultMap">
+        SELECT TABLE_NAME as tableName,TABLE_ROWS as tableRows
+        FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'yiqisong' ORDER BY TABLE_ROWS DESC
+    </select>
+
+
+
+</mapper>

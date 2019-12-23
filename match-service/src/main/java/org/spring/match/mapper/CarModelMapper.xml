@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.spring.match.mapper.CarModelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="carModelMapper" type="org.spring.match.entity.CarModel">
+        <id column="id" property="id"/>
+        <result column="car_name" property="carName"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="tmp_one" property="tmpOne"/>
+        <result column="tmp_two" property="tmpTwo"/>
+        <result column="tmp_three" property="tmpThree"/>
+    </resultMap>
+
+
+    <select id="randomCarModel" resultMap="carModelMapper">
+        select id,car_name,is_deleted
+        from car_model
+        order by rand() limit 1
+    </select>
+
+
+</mapper>

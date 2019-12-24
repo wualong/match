@@ -33,12 +33,16 @@
     </resultMap>
 
     <resultMap id="cityFreightMoneyVOResultMap" type="org.spring.match.vo.CityFreightMoneyVO">
-        <result column="" property="cityName"/>
-        <result column="" property="moneyAmount"/>
+        <result column="cityName" property="cityName"/>
+        <result column="moneyAmount" property="moneyAmount"/>
     </resultMap>
     
     <resultMap id="cityFreightAmountVOResultMap" type="org.spring.match.vo.CityFreightAmountVO">
+    </resultMap>
 
+    <resultMap id="cityFreightCarVOResult" type="org.spring.match.vo.CityFreightCarVO">
+        <result column="" property="carName"/>
+        <result column="" property="orderAmount"/>
     </resultMap>
 
     <select id="selectCurrentHotGoods" resultMap="currentHotGoodsResultMap">
@@ -62,22 +66,27 @@
     </select>
 
     <select id="selectCityFreightMoney" resultMap="cityFreightMoneyVOResultMap">
-        select cp.city_name , sum(om.order_money)
+        select cp.city_name as cityName , sum(om.order_money) as moneyAmount
         from order_main om inner join city_parameter cp on om.city_id = cp.id
         where om.is_deleted=0 and cp.is_deleted=0
         group by cp.city_name
     </select>
 
-    <select id="selectCityFreightAmount">
+    <!--<select id="selectCityFreightAmount">-->
 
+    <!--</select>-->
+
+    <select id="selectCityFreightCar" resultMap="cityFreightCarVOResult">
+        select cm.car_name, count(1)
+        from car_model cm inner join order_main om on cm.id = om.motorcycle_type_id
+        where om.is_deleted = 0 and om.is_deleted = 0
+        group by cm.car_name
     </select>
 
-    <select id="selectCityFreightCar">
-
-    </select>
-
-    <select id="selectHistoryAmount">
-
+    <select id="selectHistoryAmount" resultType="java.lang.Integer">
+        select count(1)
+        from order_main
+        where is_deleted=0 and DATE_FORMAT(order_datetime,"%Y-%m-%d") &lt;= #{dateTime}
     </select>
 
 

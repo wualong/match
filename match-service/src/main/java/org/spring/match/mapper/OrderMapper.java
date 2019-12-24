@@ -46,7 +46,7 @@ public interface OrderMapper extends BaseMapper<OrderMain> {
     /**
      * 城市货运数量统计
      */
-    List<CityFreightAmountVO> selectCityFreightAmount();
+//    List<CityFreightAmountVO> selectCityFreightAmount();
 
     /**
      * 城市货运车辆统计
@@ -56,7 +56,7 @@ public interface OrderMapper extends BaseMapper<OrderMain> {
     /**
      * 历史数据统计
      */
-    HistoryDataAmountVO selectHistoryAmount();
+    Integer selectHistoryAmount(@Param("dateTime") String dateTime);
 
     /**
      * 获取所有表数据的行数

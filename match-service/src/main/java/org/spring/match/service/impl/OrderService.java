@@ -140,7 +140,16 @@ public class OrderService extends ServiceImpl<OrderMapper, OrderMain> implements
      */
     @Override
     public List<CityFreightCarVO> selectCityFreightCar() {
-        return null;
+        OrderMain orderMain = new OrderMain();
+        orderMain.setIsDeleted(0);
+        Double allAmount = Double.valueOf(baseMapper.selectCount(new QueryWrapper<>(orderMain)));
+        List<CityFreightCarVO> cityFreightCarVOList = baseMapper.selectCityFreightCar();
+        for (int i = 0; i < cityFreightCarVOList.size() ; i++) {
+            CityFreightCarVO cityFreightCarVO = cityFreightCarVOList.get(i);
+            Double radio = Double.valueOf(cityFreightCarVO.getOrderAmount()*1.00 / allAmount);
+            cityFreightCarVO.setRadio(radio);
+        }
+        return cityFreightCarVOList;
     }
 
     /**
@@ -148,7 +157,16 @@ public class OrderService extends ServiceImpl<OrderMapper, OrderMain> implements
      */
     @Override
     public HistoryDataAmountVO selectHistoryAmount() {
-        return null;
+        HistoryDataAmountVO historyDataAmountVO = new HistoryDataAmountVO();
+        String dateTime = CommonUtil.date2Str(CommonUtil.DATE_SDF);
+        Integer allAmount =  baseMapper.selectHistoryAmount(dateTime);
+        if(allAmount==0){
+            return historyDataAmountVO;
+        }
+        historyDataAmountVO.setHistoryOrderAmount(allAmount);
+        historyDataAmountVO.setHistoryOrderMoney(allAmount*CommonUtil.randomGetOrderMoney(18,22));
+        historyDataAmountVO.setHistoryGoodsAmount(allAmount*3);
+        return historyDataAmountVO;
     }
 
     /**
@@ -230,7 +248,7 @@ public class OrderService extends ServiceImpl<OrderMapper, OrderMain> implements
         orderMain.setOneGoodsId(secondGoods.getParentId());
         orderMain.setTwoGoodsId(secondGoods.getId());
         orderMain.setOrderMoney(secondGoods.getGoodsPrice());
-        //order.setMotorcycleTypeId(carModel.getId());
+        orderMain.setMotorcycleTypeId(carModel.getId());
         return orderMain;
     }
 

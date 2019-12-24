@@ -2,8 +2,6 @@ package org.spring.match.dto;
 
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class SftpDTO {
 	// 时

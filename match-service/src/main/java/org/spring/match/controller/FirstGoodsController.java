@@ -2,9 +2,7 @@ package org.spring.match.controller;
 
 import lombok.AllArgsConstructor;
 import org.spring.match.dto.RData;
-import org.spring.match.service.ICityParameterService;
 import org.spring.match.service.IFirstGoodsService;
-import org.spring.match.vo.CityParameterVO;
 import org.spring.match.vo.FirstGoodsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

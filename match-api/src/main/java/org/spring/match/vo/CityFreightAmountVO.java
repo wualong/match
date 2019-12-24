@@ -3,7 +3,6 @@ package org.spring.match.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * 城市货物数量统计

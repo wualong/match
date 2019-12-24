@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import org.spring.match.dto.RData;
 import org.spring.match.entity.CarModel;
 import org.spring.match.service.ICarModelService;
-import org.spring.match.service.ICityParameterService;
-import org.spring.match.vo.CityParameterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

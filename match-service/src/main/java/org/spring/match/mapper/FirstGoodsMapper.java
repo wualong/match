@@ -1,7 +1,6 @@
 package org.spring.match.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.spring.match.entity.CityParameter;
 import org.spring.match.entity.FirstGoods;
 import org.springframework.stereotype.Repository;
 

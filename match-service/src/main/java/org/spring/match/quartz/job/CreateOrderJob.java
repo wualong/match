@@ -6,6 +6,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spring.match.dto.SftpDTO;
+import org.spring.match.quartz.QuartzManager;
+import org.spring.match.quartz.SftpTask;
 import org.spring.match.service.IOrderService;
 import org.spring.match.util.ApplicationContextHelper;
 import org.springframework.context.ApplicationContext;
@@ -41,7 +44,15 @@ public class CreateOrderJob extends QuartzJobBean {
 	 */
 	public void task(){
 		IOrderService orderMainService = ApplicationContextHelper.getBean(IOrderService.class);
+		QuartzManager quartzManager = ApplicationContextHelper.getBean(QuartzManager.class);
+		// 创建订单
 		orderMainService.createOrder();
+		boolean b = orderMainService.stopCreateOrder();
+		// 查看数据库是否出发10万条数据
+		if(b){
+			quartzManager.removeJob("firstJobDetail","DEFAULT","firstTrigger","DEFAULT");
+		}
+		LOGGER.info("结果：		"+b);
 		LOGGER.info("orderMainService：		"+orderMainService);
 	}
 }

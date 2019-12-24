@@ -1,18 +1,13 @@
 package org.spring.match.config;
 
-import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.spring.match.quartz.job.CreateOrderJob;
-import org.spring.match.quartz.job.StopCreateJob;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
-
-import javax.validation.GroupSequence;
 
 @Configuration
 //@DisallowConcurrentExecution//代表设置该任务为串行执行
@@ -36,35 +31,9 @@ public class QuartzConfig {
 		CronTriggerFactoryBean trigger = new CronTriggerFactoryBean();
 		trigger.setJobDetail(firstJobDetail);
 		// cron表达式
-		trigger.setCronExpression("* * 9,12:30 * * ? *");
+		trigger.setCronExpression("* * 9-12:30 * * ? *");
 		return trigger;
 	}
-
-	@Bean(name = "secondJobDetail")
-	public MethodInvokingJobDetailFactoryBean secondJobDetail(StopCreateJob job) {
-		MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
-		// 是否并发执行
-		jobDetail.setConcurrent(true);
-		// 为需要执行的实体类对应的对象
-		jobDetail.setTargetObject(job);
-		// 需要执行的方法
-		jobDetail.setTargetMethod("task");
-		return jobDetail;
-	}
-
-	// 配置触发器2
-	@Bean(name = "secondTrigger")
-	public SimpleTriggerFactoryBean secondTrigger(JobDetail secondJobDetail) {
-		SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
-		trigger.setJobDetail(secondJobDetail);
-		// 设置任务启动延迟
-		trigger.setStartDelay(0);
-		// 每5秒执行一次
-		trigger.setRepeatInterval(5000);
-		return trigger;
-	}
-
-
 
 	// 配置Scheduler
 	@Bean(name = "scheduler")
@@ -75,7 +44,7 @@ public class QuartzConfig {
 		// 注册触发器1
 		bean.setTriggers(firstTrigger);
 		// 注册触发器2
-		bean.setTriggers(secondTrigger);
+		//bean.setTriggers(secondTrigger);
 		return bean;
 	}
 
